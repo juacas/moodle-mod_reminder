@@ -18,12 +18,13 @@ function sendReminders()
 $prev=48*3600;
 
 $cond= '((eventtype="close" AND modulename="feedback") OR (eventtype="due" AND modulename="assignment")) ';
-
-$lastReminder=get_config(NULL, 'REMINDER_LAST_MESSAGES_TIMESTAMP');
-if (!$lastReminder)
- $lastReminder=0;
- 
 $now = time();
+
+$lastReminder=get_config(NULL, 'REMINDER_LAST_MESSAGES_TIMESTAMP'); 
+
+if (!$lastReminder)
+ $lastReminder=$now;
+
 $next_events_timestamp=$now+$prev;
 $select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder)";
 
