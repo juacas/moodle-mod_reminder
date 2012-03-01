@@ -3,8 +3,8 @@ global $base;
 $base="../..";
 $base=$CFG->dirroot;
 require_once($base."/config.php");
-
-
+define("TIMEFORMAT","%A %d %B %Y a las %T");
+define("TIMEDELTA",48*3600);
 
 function reminder_cron()
 {
@@ -15,7 +15,7 @@ mtrace("========== Checking reminders END ===========");
 
 function sendReminders()
 {
-$prev=48*3600;
+$prev=TIMEDELTA;
 
 $cond= '((eventtype="close" AND modulename="feedback") OR (eventtype="due" AND modulename="assignment")) ';
 $now = time();
@@ -27,8 +27,10 @@ if (!$lastReminder)
 
 $next_events_timestamp=$now+$prev;
 $select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder)";
+setlocale(LC_TIME,"es_ES.UTF-8");
 
-mtrace("Searching events from ".date(DATE_RFC822,$lastReminder)." to ".date(DATE_RFC822,$next_events_timestamp));
+//mtrace("Searching events from ".date(DATE_RFC822,$lastReminder)." to ".date(DATE_RFC822,$next_events_timestamp));
+mtrace("Searching events from ".strftime(TIMEFORMAT,$lastReminder)." to ".strftime(TIMEFORMAT,$next_events_timestamp));
 mtrace("query:$select");
 
 $events = get_records_select('event',$select);
@@ -97,12 +99,13 @@ else
  */
     function reminder_message($event)
     {
+     setlocale(LC_TIME,"es_ES.UTF-8");
      /// Get the course record to format message variables
      $course = get_record('course', 'id', $event->courseid);
      $message = "<p>Hay una fecha límite importante próxima a cumplirse en \"$course->fullname\": </p>";
 
     /// Add the date for the event and the description for the event to the end of the message.
-     $message .= "<p>La fecha límite es: ". userdate($event->timestart)." Por favor verifique que ha completado sus tareas.</p>";
+     $message .= "<p>La fecha límite es: ". strftime(TIMEFORMAT,$event->timestart)." Por favor verifique que ha completado sus tareas.</p>";
      $message .= format_text($event->description);
      return $message;
     }
