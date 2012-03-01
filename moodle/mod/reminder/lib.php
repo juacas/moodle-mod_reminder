@@ -27,7 +27,7 @@ if (!$lastReminder)
 
 $next_events_timestamp=$now+$prev;
 $select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder)";
-setlocale(LC_TIME,"es_ES.UTF-8");
+//setlocale(LC_TIME,"es_ES.UTF-8");
 
 //mtrace("Searching events from ".date(DATE_RFC822,$lastReminder)." to ".date(DATE_RFC822,$next_events_timestamp));
 mtrace("Searching events from ".strftime(TIMEFORMAT,$lastReminder)." to ".strftime(TIMEFORMAT,$next_events_timestamp));
@@ -99,7 +99,7 @@ else
  */
     function reminder_message($event)
     {
-     setlocale(LC_TIME,"es_ES.UTF-8");
+//     setlocale(LC_TIME,"es_ES.UTF-8");
      /// Get the course record to format message variables
      $course = get_record('course', 'id', $event->courseid);
      $message = "<p>Hay una fecha límite importante próxima a cumplirse en \"$course->fullname\": </p>";
