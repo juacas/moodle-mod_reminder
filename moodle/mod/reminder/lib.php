@@ -68,7 +68,7 @@ else
    /// General message information.
         $userfrom = get_admin();
         $site     = get_site();
-        $subject  = "Aviso de próxima fecha límite de evento importante en: $site->fullname";
+        $subject  = "Aviso de prÃ³xima fecha lÃ­mite de evento importante en: $site->fullname";
         $message  = reminder_message($event);
 
        
@@ -99,10 +99,10 @@ else
     {
      /// Get the course record to format message variables
      $course = get_record('course', 'id', $event->courseid);
-     $message = "<p>Hay una fecha límite importante próxima a cumplirse en \"$course->fullname\": </p>";
+     $message = "<p>Hay una fecha lÃ­mite importante prÃ³xima a cumplirse en \"$course->fullname\": </p>";
 
     /// Add the date for the event and the description for the event to the end of the message.
-     $message .= "<p>La fecha límite es: ". userdate($event->timestart)." Por favor verifique que ha completado sus tareas.</p>";
+     $message .= "<p>La fecha lÃ­mite es: ". userdate($event->timestart)." Por favor verifique que ha completado sus tareas.</p>";
      $message .= format_text($event->description);
      return $message;
     }
