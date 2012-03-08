@@ -28,7 +28,7 @@ if (!$lastReminder)
  $lastReminder=$now;
 
 $next_events_timestamp=$now+$prev;
-$select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder)";
+$select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder) ORDER BY timestart ASC";
 
 //mtrace("Searching events from ".date(DATE_RFC822,$lastReminder)." to ".date(DATE_RFC822,$next_events_timestamp));
 mtrace("Searching events from ".strftime(TIMEFORMAT,$lastReminder)." to ".strftime(TIMEFORMAT,$next_events_timestamp));
@@ -46,8 +46,9 @@ else
 	foreach ($events as $event)
 	{
 		send_event($event);
+//		set_config('REMINDER_LAST_MESSAGES_TIMESTAMP', $event->timestart+1); // mark timestamp to avoid reprocess this event if error
 	}	
-	set_config('REMINDER_LAST_MESSAGES_TIMESTAMP', $next_events_timestamp);
+	set_config('REMINDER_LAST_MESSAGES_TIMESTAMP', $next_events_timestamp+1);
 }
 
 
@@ -82,13 +83,13 @@ else
         foreach ($users as $user) {
         	if (!empty($CFG->messaging))
         	{
-        		print_object($message);
+        		//print_object($message);
         		message_post_message($userfrom, $user, $message, 0, 'direct');
         	} else
         	{
-        		print_object($message);
+        		//print_object($message);
         		email_to_user($user, $userfrom, $subject, $message);
-        	}
+        	} 
 
         	mtrace('Sent reminder "' . $event->name . '" to user ' . fullname($user) . "\n");
         }
