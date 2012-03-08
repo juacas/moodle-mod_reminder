@@ -6,6 +6,8 @@ require_once($base."/config.php");
 define("TIMEFORMAT","%A %d %B %Y a las %T");
 define("TIMEDELTA",48*3600);
 
+
+
 function reminder_cron()
 {
 mtrace("\n========== Checking reminders START ===========");
@@ -27,7 +29,6 @@ if (!$lastReminder)
 
 $next_events_timestamp=$now+$prev;
 $select="$cond" . "AND (timestart<=$next_events_timestamp AND timestart>$lastReminder)";
-//setlocale(LC_TIME,"es_ES.UTF-8");
 
 //mtrace("Searching events from ".date(DATE_RFC822,$lastReminder)." to ".date(DATE_RFC822,$next_events_timestamp));
 mtrace("Searching events from ".strftime(TIMEFORMAT,$lastReminder)." to ".strftime(TIMEFORMAT,$next_events_timestamp));
@@ -71,7 +72,7 @@ else
         $userfrom = get_admin();
         $site     = get_site();
         $subject  = "Aviso de próxima fecha límite de evento importante en: $site->fullname";
-        $message  = reminder_message($event);
+        $message  = reminder_message($event, $site);
 
        
         /// Get all the users in the course and send them the reminder
@@ -97,16 +98,17 @@ else
  *
  * @param int $eventid The ID of the event to format a message for.
  */
-    function reminder_message($event)
+    function reminder_message($event, $site)
     {
-//     setlocale(LC_TIME,"es_ES.UTF-8");
      /// Get the course record to format message variables
      $course = get_record('course', 'id', $event->courseid);
-     $message = "<p>Hay una fecha límite importante próxima a cumplirse en \"$course->fullname\": </p>";
-
+	 
+     $message = "<p>Hay una fecha límite importante próxima a cumplirse en el Esquema \"$course->fullname\": </p>";
+	 $message .= "<p>La fecha límite es: ". userdate($event->timestart)." Por favor compruebe que ha completado sus tareas.</p>";
+	 $message = "<h1>$event->name</h1>";
+	 $message .= "<p>".format_text($event->description)."</p>";
     /// Add the date for the event and the description for the event to the end of the message.
-     $message .= "<p>La fecha límite es: ". strftime(TIMEFORMAT,$event->timestart)." Por favor verifique que ha completado sus tareas.</p>";
-     $message .= format_text($event->description);
+	 $message .= "<hr/><p>Un cordial saludo.</p><p>El equipo de \"$site->fullname\"</p>";
      return $message;
     }
 ?>
