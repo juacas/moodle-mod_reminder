@@ -19,7 +19,8 @@ function sendReminders()
 {
 $prev=TIMEDELTA;
 
-$cond= '((eventtype="close" AND modulename="feedback") OR (eventtype="due" AND modulename="assignment")) ';
+//$cond= '((eventtype="close" AND modulename="feedback") OR (eventtype="due" AND modulename="assignment")) ';
+$cond= ' (eventtype="close" AND modulename="feedback") ';
 $now = time();
 
 $lastReminder=get_config(NULL, 'REMINDER_LAST_MESSAGES_TIMESTAMP'); 
