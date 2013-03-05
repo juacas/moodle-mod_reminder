@@ -107,6 +107,7 @@ else
 	 
      $message = "<p>Hay una fecha límite importante próxima a cumplirse en el Esquema \"$course->fullname\": </p>";
 	 $message .= "<p>La fecha límite es: ". userdate($event->timestart)." Por favor compruebe que ha completado sus tareas.</p>";
+     $message = "<p>(Este mensaje es un recordatorio automático. Si ya ha hecho su entrega puede ignorar este aviso.)</p>";
 	 $message .= "<h1>$event->name</h1>";
 	 $message .= "<p>".format_text($event->description)."</p>";
     /// Add the date for the event and the description for the event to the end of the message.
